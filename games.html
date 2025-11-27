@@ -1,0 +1,1516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>经典游戏大全</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        /* 导航标签样式 */
+        .nav-tabs {
+            display: flex;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .nav-tab {
+            flex: 1;
+            padding: 15px 20px;
+            background: #ecf0f1;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #34495e;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tab:hover {
+            background: #d5dbdb;
+        }
+        
+        .nav-tab.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        /* 页面内容 */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* 游戏列表页面 */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .game-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .game-image {
+            height: 160px;
+            background-color: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .game-info {
+            padding: 20px;
+        }
+        
+        .game-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .game-description {
+            color: #7f8c8d;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+        
+        .play-button {
+            display: inline-block;
+            padding: 8px 20px;
+            background: #3498db;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .play-button:hover {
+            background: #2980b9;
+        }
+        
+        /* 我的页面样式 */
+        .profile-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .profile-name {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .profile-name:hover {
+            color: #3498db;
+        }
+        
+        .name-input {
+            display: none;
+            width: 100%;
+            max-width: 300px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            text-align: center;
+            margin: 0 auto 10px;
+        }
+        
+        .name-input.editing {
+            display: block;
+        }
+        
+        .save-name-btn {
+            display: none;
+            padding: 8px 20px;
+            background: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+            margin: 0 auto;
+        }
+        
+        .save-name-btn.editing {
+            display: block;
+        }
+        
+        .records-list {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .records-title {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        
+        .record-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .record-game {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .record-difficulty {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-left: 5px;
+        }
+        
+        .record-time {
+            color: #3498db;
+            font-weight: 600;
+        }
+        
+        .clear-record-btn {
+            padding: 5px 10px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: background 0.3s ease;
+        }
+        
+        .clear-record-btn:hover {
+            background: #c0392b;
+        }
+        
+        /* 游戏容器 */
+        .game-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        .game-container.active {
+            display: block;
+        }
+        
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #3498db;
+            color: white;
+        }
+        
+        .game-title-large {
+            font-size: 1.8rem;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .back-button {
+            padding: 8px 15px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .back-button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .game-content {
+            padding: 15px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        /* 扫雷游戏样式 */
+        .minesweeper-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            background: #2c3e50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .minesweeper-info-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .minesweeper-info-label {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .minesweeper-info-value {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        
+        .minesweeper-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .minesweeper-btn {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            flex: 1;
+            text-align: center;
+        }
+        
+        .minesweeper-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .minesweeper-difficulty-btn {
+            background: #3498db;
+            color: white;
+            position: relative;
+        }
+        
+        .minesweeper-difficulty-selector {
+            position: relative;
+            flex: 1;
+        }
+        
+        .minesweeper-difficulty-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 100;
+            display: none;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+        
+        .minesweeper-difficulty-dropdown.show {
+            display: block;
+        }
+        
+        .minesweeper-difficulty-option {
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .minesweeper-difficulty-option:last-child {
+            border-bottom: none;
+        }
+        
+        .minesweeper-difficulty-option:hover {
+            background: #f0f0f0;
+        }
+        
+        .minesweeper-difficulty-option.active {
+            background: #3498db;
+            color: white;
+        }
+        
+        .minesweeper-reset-btn {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .minesweeper-hint-btn {
+            background: #f39c12;
+            color: white;
+        }
+        
+        .minesweeper-board-container {
+            width: 100%;
+            overflow: auto;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        
+        .minesweeper-board {
+            display: grid;
+            gap: 3px;
+            background: #1b5e20;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .minesweeper-cell {
+            width: 35px;
+            height: 35px;
+            background: #a5d6a7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+            user-select: none;
+            transition: all 0.1s;
+            font-size: 16px;
+        }
+        
+        .minesweeper-cell:active {
+            transform: scale(0.95);
+        }
+        
+        .minesweeper-cell.revealed {
+            background: #d7ccc8;
+        }
+        
+        .minesweeper-cell.flagged::before {
+            content: "⚑";
+            color: #e74c3c;
+            font-size: 1.2rem;
+        }
+        
+        .minesweeper-cell.mine {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        .minesweeper-cell.mine::before {
+            content: "💣";
+        }
+        
+        .minesweeper-number-1 { color: #3498db; }
+        .minesweeper-number-2 { color: #2ecc71; }
+        .minesweeper-number-3 { color: #e74c3c; }
+        .minesweeper-number-4 { color: #9b59b6; }
+        .minesweeper-number-5 { color: #e67e22; }
+        .minesweeper-number-6 { color: #1abc9c; }
+        .minesweeper-number-7 { color: #34495e; }
+        .minesweeper-number-8 { color: #7f8c8d; }
+        
+        .minesweeper-message {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .minesweeper-message.success {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        
+        .minesweeper-message.failure {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        
+        /* 历史记录弹窗样式 */
+        .history-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .history-modal.show {
+            display: flex;
+        }
+        
+        .history-modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .history-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+        
+        .history-modal-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+        
+        .history-modal-close {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .history-time {
+            color: #7f8c8d;
+        }
+        
+        .clear-all-history {
+            background: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 15px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .minesweeper-cell {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .minesweeper-cell {
+                width: 28px;
+                height: 28px;
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>经典游戏大全</h1>
+            <p class="description">重温经典，体验乐趣！精选多款经典游戏，无需下载，在线畅玩。</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" data-page="games-page">游戏</div>
+            <div class="nav-tab" data-page="profile-page">我的</div>
+        </div>
+        
+        <!-- 游戏页面 -->
+        <div id="games-page" class="page active">
+            <div class="games-grid">
+                <div class="game-card" data-game="minesweeper">
+                    <div class="game-image" style="background-color: #3498db;">💣</div>
+                    <div class="game-info">
+                        <h3 class="game-title">扫雷</h3>
+                        <p class="game-description">经典的逻辑推理游戏，通过数字提示找出所有地雷。</p>
+                        <a class="play-button">开始游戏</a>
+                    </div>
+                </div>
+                
+                <div class="game-card" data-game="snake">
+                    <div class="game-image" style="background-color: #2ecc71;">🐍</div>
+                    <div class="game-info">
+                        <h3 class="game-title">贪吃蛇</h3>
+                        <p class="game-description">控制蛇吃食物变长，小心不要撞到自己！</p>
+                        <a class="play-button">开始游戏</a>
+                    </div>
+                </div>
+                
+                <div class="game-card" data-game="tetris">
+                    <div class="game-image" style="background-color: #9b59b6;">🧩</div>
+                    <div class="game-info">
+                        <h3 class="game-title">俄罗斯方块</h3>
+                        <p class="game-description">经典消除游戏，合理安排下落的方块。</p>
+                        <a class="play-button">开始游戏</a>
+                    </div>
+                </div>
+                
+                <div class="game-card" data-game="2048">
+                    <div class="game-image" style="background-color: #e67e22;">🔢</div>
+                    <div class="game-info">
+                        <h3 class="game-title">2048</h3>
+                        <p class="game-description">滑动合并相同数字，努力达到2048方块！</p>
+                        <a class="play-button">开始游戏</a>
+                    </div>
+                </div>
+                
+                <div class="game-card" data-game="crossy-road">
+                    <div class="game-image" style="background-color: #1abc9c;">🚶</div>
+                    <div class="game-info">
+                        <h3 class="game-title">过马路</h3>
+                        <p class="game-description">安全穿越马路，避开障碍物。</p>
+                        <a class="play-button">开始游戏</a>
+                    </div>
+                </div>
+                
+                <div class="game-card" data-game="memory">
+                    <div class="game-image" style="background-color: #d35400;">🧠</div>
+                    <div class="game-info">
+                        <h3 class="game-title">记忆配对</h3>
+                        <p class="game-description">翻开卡片寻找匹配对，测试你的记忆力。</p>
+                        <a class="play-button">开始游戏</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 我的页面 -->
+        <div id="profile-page" class="page">
+            <div class="profile-section">
+                <div class="profile-name" id="profile-name">玩家</div>
+                <input type="text" class="name-input" id="name-input" placeholder="输入昵称">
+                <button class="save-name-btn" id="save-name-btn">保存</button>
+            </div>
+            
+            <div class="records-list">
+                <div class="records-title">游戏记录</div>
+                <div id="records-container">
+                    <!-- 记录将通过JavaScript动态添加 -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 游戏容器 -->
+    <div class="game-container" id="minesweeper-game">
+        <div class="game-header">
+            <button class="back-button">返回游戏列表</button>
+            <div class="game-title-large">扫雷</div>
+            <div></div> <!-- 占位元素保持布局平衡 -->
+        </div>
+        
+        <div class="game-content">
+            <div class="minesweeper-info">
+                <div class="minesweeper-info-item">
+                    <div class="minesweeper-info-label">剩余地雷</div>
+                    <div class="minesweeper-info-value" id="mines-count">10</div>
+                </div>
+                <div class="minesweeper-info-item">
+                    <div class="minesweeper-info-label">时间</div>
+                    <div class="minesweeper-info-value" id="timer">0</div>
+                </div>
+                <div class="minesweeper-info-item">
+                    <div class="minesweeper-info-label">难度</div>
+                    <div class="minesweeper-info-value" id="difficulty">简单</div>
+                </div>
+            </div>
+            
+            <div class="minesweeper-controls">
+                <div class="minesweeper-difficulty-selector">
+                    <button class="minesweeper-btn minesweeper-difficulty-btn" id="difficulty-toggle">难度: 简单</button>
+                    <div class="minesweeper-difficulty-dropdown" id="difficulty-dropdown">
+                        <div class="minesweeper-difficulty-option active" data-level="easy">简单 (6×12)</div>
+                        <div class="minesweeper-difficulty-option" data-level="medium">中等 (8×14)</div>
+                        <div class="minesweeper-difficulty-option" data-level="hard">困难 (10×15)</div>
+                    </div>
+                </div>
+                <button class="minesweeper-btn minesweeper-reset-btn" id="reset-btn">重新开始</button>
+                <button class="minesweeper-btn minesweeper-hint-btn" id="hint-btn">提示</button>
+            </div>
+            
+            <div class="minesweeper-board-container">
+                <div class="minesweeper-board" id="game-board"></div>
+            </div>
+            
+            <div class="minesweeper-message" id="message"></div>
+        </div>
+    </div>
+    
+    <!-- 扫雷历史记录弹窗 -->
+    <div class="history-modal" id="minesweeper-history-modal">
+        <div class="history-modal-content">
+            <div class="history-modal-header">
+                <div class="history-modal-title">扫雷游戏历史</div>
+                <button class="history-modal-close" id="close-history-modal">×</button>
+            </div>
+            <div class="history-list" id="minesweeper-history-list">
+                <!-- 历史记录将通过JavaScript动态添加 -->
+            </div>
+            <button class="clear-all-history" id="clear-minesweeper-history">清除扫雷历史记录</button>
+        </div>
+    </div>
+
+    <script>
+        // 应用状态管理
+        const appState = {
+            currentPage: 'games-page',
+            currentGame: null,
+            playerName: localStorage.getItem('playerName') || '玩家',
+            gameRecords: JSON.parse(localStorage.getItem('gameRecords')) || {},
+            minesweeperHistory: JSON.parse(localStorage.getItem('minesweeperHistory')) || []
+        };
+        
+        // 初始化应用
+        document.addEventListener('DOMContentLoaded', () => {
+            // 设置玩家名称
+            document.getElementById('profile-name').textContent = appState.playerName;
+            
+            // 加载游戏记录
+            loadGameRecords();
+            
+            // 设置事件监听
+            setupEventListeners();
+        });
+        
+        // 设置事件监听
+        function setupEventListeners() {
+            // 导航标签点击事件
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const pageId = tab.dataset.page;
+                    switchPage(pageId);
+                });
+            });
+            
+            // 游戏卡片点击事件
+            document.querySelectorAll('.game-card').forEach(card => {
+                card.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('play-button')) {
+                        const gameId = card.dataset.game;
+                        openGame(gameId);
+                    }
+                });
+            });
+            
+            // 返回按钮事件
+            document.querySelectorAll('.back-button').forEach(button => {
+                button.addEventListener('click', closeGame);
+            });
+            
+            // 玩家名称编辑事件
+            document.getElementById('profile-name').addEventListener('click', startNameEditing);
+            document.getElementById('save-name-btn').addEventListener('click', savePlayerName);
+            
+            // 关闭历史记录弹窗
+            document.getElementById('close-history-modal').addEventListener('click', closeMinesweeperHistory);
+            
+            // 清除扫雷历史记录
+            document.getElementById('clear-minesweeper-history').addEventListener('click', clearMinesweeperHistory);
+            
+            // 点击页面其他区域取消名称编辑
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.profile-section')) {
+                    cancelNameEditing();
+                }
+            });
+            
+            // 点击页面其他区域关闭历史记录弹窗
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('history-modal')) {
+                    closeMinesweeperHistory();
+                }
+            });
+        }
+        
+        // 切换页面
+        function switchPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // 显示目标页面
+            document.getElementById(pageId).classList.add('active');
+            
+            // 更新导航标签状态
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.page === pageId);
+            });
+            
+            appState.currentPage = pageId;
+            
+            // 如果是"我的"页面，重新加载记录
+            if (pageId === 'profile-page') {
+                loadGameRecords();
+            }
+        }
+        
+        // 打开游戏
+        function openGame(gameId) {
+            appState.currentGame = gameId;
+            
+            // 隐藏所有游戏容器
+            document.querySelectorAll('.game-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            // 隐藏游戏列表
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // 显示选中的游戏
+            document.getElementById(`${gameId}-game`).classList.add('active');
+            
+            // 初始化游戏
+            if (gameId === 'minesweeper') {
+                initMinesweeper();
+            }
+        }
+        
+        // 关闭游戏
+        function closeGame() {
+            // 隐藏所有游戏容器
+            document.querySelectorAll('.game-container').forEach(container => {
+                container.classList.remove('active');
+            });
+            
+            // 显示游戏列表
+            document.getElementById('games-page').classList.add('active');
+            
+            appState.currentGame = null;
+            
+            // 重新加载游戏记录
+            loadGameRecords();
+        }
+        
+        // 开始编辑玩家名称
+        function startNameEditing() {
+            document.getElementById('profile-name').style.display = 'none';
+            document.getElementById('name-input').classList.add('editing');
+            document.getElementById('save-name-btn').classList.add('editing');
+            
+            document.getElementById('name-input').value = appState.playerName;
+            document.getElementById('name-input').focus();
+        }
+        
+        // 保存玩家名称
+        function savePlayerName() {
+            const newName = document.getElementById('name-input').value.trim() || '玩家';
+            appState.playerName = newName;
+            localStorage.setItem('playerName', newName);
+            
+            document.getElementById('profile-name').textContent = newName;
+            cancelNameEditing();
+        }
+        
+        // 取消名称编辑
+        function cancelNameEditing() {
+            document.getElementById('profile-name').style.display = 'block';
+            document.getElementById('name-input').classList.remove('editing');
+            document.getElementById('save-name-btn').classList.remove('editing');
+        }
+        
+        // 加载游戏记录
+        function loadGameRecords() {
+            const recordsContainer = document.getElementById('records-container');
+            recordsContainer.innerHTML = '';
+            
+            // 从localStorage加载记录
+            appState.gameRecords = JSON.parse(localStorage.getItem('gameRecords')) || {};
+            appState.minesweeperHistory = JSON.parse(localStorage.getItem('minesweeperHistory')) || [];
+            
+            // 为每个游戏创建记录项
+            const games = [
+                { id: 'minesweeper', name: '扫雷' },
+                { id: 'snake', name: '贪吃蛇' },
+                { id: 'tetris', name: '俄罗斯方块' },
+                { id: '2048', name: '2048' },
+                { id: 'crossy-road', name: '过马路' },
+                { id: 'memory', name: '记忆配对' }
+            ];
+            
+            games.forEach(game => {
+                const record = appState.gameRecords[game.id] || { bestTime: 0, played: false, difficulty: '' };
+                
+                const recordItem = document.createElement('div');
+                recordItem.className = 'record-item';
+                
+                if (record.played) {
+                    // 格式化时间显示
+                    let timeDisplay = '';
+                    if (record.bestTime >= 60) {
+                        const minutes = Math.floor(record.bestTime / 60);
+                        const seconds = record.bestTime % 60;
+                        timeDisplay = `${minutes}分${seconds}秒`;
+                    } else {
+                        timeDisplay = `${record.bestTime}秒`;
+                    }
+                    
+                    recordItem.innerHTML = `
+                        <div>
+                            <span class="record-game">${game.name}</span>
+                            <span class="record-difficulty">${record.difficulty ? `(${record.difficulty})` : ''}</span>
+                        </div>
+                        <div>
+                            <button class="clear-record-btn" data-game="${game.id}">清除</button>
+                        </div>
+                        <span class="record-time">${timeDisplay}</span>
+                    `;
+                } else {
+                    recordItem.innerHTML = `
+                        <span class="record-game">${game.name}</span>
+                        <div></div>
+                        <span class="record-time">暂无记录</span>
+                    `;
+                }
+                
+                recordsContainer.appendChild(recordItem);
+            });
+            
+            // 添加清除按钮事件
+            document.querySelectorAll('.clear-record-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const gameId = btn.dataset.game;
+                    clearGameRecord(gameId);
+                });
+            });
+            
+            // 添加扫雷历史记录点击事件
+            const minesweeperRecord = document.querySelector('.record-game');
+            if (minesweeperRecord && minesweeperRecord.textContent === '扫雷') {
+                minesweeperRecord.parentElement.parentElement.addEventListener('click', () => {
+                    showMinesweeperHistory();
+                });
+            }
+        }
+        
+        // 清除游戏记录
+        function clearGameRecord(gameId) {
+            if (confirm(`确定要清除${getGameName(gameId)}的游戏记录吗？`)) {
+                if (appState.gameRecords[gameId]) {
+                    delete appState.gameRecords[gameId];
+                    localStorage.setItem('gameRecords', JSON.stringify(appState.gameRecords));
+                    loadGameRecords();
+                }
+            }
+        }
+        
+        // 获取游戏名称
+        function getGameName(gameId) {
+            const gameNames = {
+                'minesweeper': '扫雷',
+                'snake': '贪吃蛇',
+                'tetris': '俄罗斯方块',
+                '2048': '2048',
+                'crossy-road': '过马路',
+                'memory': '记忆配对'
+            };
+            return gameNames[gameId] || gameId;
+        }
+        
+        // 保存游戏记录
+        function saveGameRecord(gameId, time, difficulty = '') {
+            if (!appState.gameRecords[gameId]) {
+                appState.gameRecords[gameId] = { 
+                    bestTime: time, 
+                    played: true, 
+                    difficulty: difficulty,
+                    date: new Date().toLocaleDateString('zh-CN')
+                };
+            } else if (time < appState.gameRecords[gameId].bestTime || appState.gameRecords[gameId].bestTime === 0) {
+                appState.gameRecords[gameId].bestTime = time;
+                appState.gameRecords[gameId].played = true;
+                appState.gameRecords[gameId].difficulty = difficulty;
+                appState.gameRecords[gameId].date = new Date().toLocaleDateString('zh-CN');
+            } else {
+                appState.gameRecords[gameId].played = true;
+            }
+            
+            localStorage.setItem('gameRecords', JSON.stringify(appState.gameRecords));
+            loadGameRecords();
+        }
+        
+        // 保存扫雷历史记录
+        function saveMinesweeperHistory(time, difficulty) {
+            const historyItem = {
+                time: time,
+                difficulty: difficulty,
+                date: new Date().toLocaleString('zh-CN')
+            };
+            
+            appState.minesweeperHistory.unshift(historyItem);
+            
+            // 只保留最近20条记录
+            if (appState.minesweeperHistory.length > 20) {
+                appState.minesweeperHistory = appState.minesweeperHistory.slice(0, 20);
+            }
+            
+            localStorage.setItem('minesweeperHistory', JSON.stringify(appState.minesweeperHistory));
+        }
+        
+        // 显示扫雷历史记录
+        function showMinesweeperHistory() {
+            const historyList = document.getElementById('minesweeper-history-list');
+            historyList.innerHTML = '';
+            
+            if (appState.minesweeperHistory.length === 0) {
+                historyList.innerHTML = '<div class="history-item">暂无游戏记录</div>';
+            } else {
+                appState.minesweeperHistory.forEach(record => {
+                    const historyItem = document.createElement('div');
+                    historyItem.className = 'history-item';
+                    
+                    // 格式化时间显示
+                    let timeDisplay = '';
+                    if (record.time >= 60) {
+                        const minutes = Math.floor(record.time / 60);
+                        const seconds = record.time % 60;
+                        timeDisplay = `${minutes}分${seconds}秒`;
+                    } else {
+                        timeDisplay = `${record.time}秒`;
+                    }
+                    
+                    historyItem.innerHTML = `
+                        <span>${record.date}</span>
+                        <span class="history-time">${timeDisplay} (${record.difficulty})</span>
+                    `;
+                    historyList.appendChild(historyItem);
+                });
+            }
+            
+            document.getElementById('minesweeper-history-modal').classList.add('show');
+        }
+        
+        // 关闭扫雷历史记录
+        function closeMinesweeperHistory() {
+            document.getElementById('minesweeper-history-modal').classList.remove('show');
+        }
+        
+        // 清除扫雷历史记录
+        function clearMinesweeperHistory() {
+            if (confirm('确定要清除所有扫雷历史记录吗？此操作不可撤销。')) {
+                appState.minesweeperHistory = [];
+                localStorage.setItem('minesweeperHistory', JSON.stringify(appState.minesweeperHistory));
+                closeMinesweeperHistory();
+            }
+        }
+        
+        // 扫雷游戏实现
+        function initMinesweeper() {
+            // 扫雷游戏状态和配置
+            const gameState = {
+                board: [],
+                rows: 12,
+                cols: 6,
+                mineCount: 10,
+                revealedCount: 0,
+                flaggedCount: 0,
+                gameOver: false,
+                gameStarted: false,
+                timer: 0,
+                timerInterval: null,
+                currentDifficulty: 'easy',
+                firstClick: true,
+                startTime: null
+            };
+
+            // 难度配置
+            const difficultyConfig = {
+                easy: { rows: 12, cols: 6, mines: 10 },
+                medium: { rows: 14, cols: 8, mines: 30 },
+                hard: { rows: 15, cols: 10, mines: 50 }
+            };
+
+            // 初始化游戏
+            function initGame() {
+                clearInterval(gameState.timerInterval);
+                gameState.timer = 0;
+                gameState.gameOver = false;
+                gameState.gameStarted = false;
+                gameState.revealedCount = 0;
+                gameState.flaggedCount = 0;
+                gameState.firstClick = true;
+                gameState.startTime = null;
+                
+                document.getElementById('timer').textContent = '0';
+                document.getElementById('mines-count').textContent = gameState.mineCount.toString();
+                document.getElementById('message').className = 'minesweeper-message';
+                document.getElementById('message').textContent = '';
+                
+                createBoard();
+            }
+
+            // 创建游戏棋盘
+            function createBoard() {
+                const boardElement = document.getElementById('game-board');
+                boardElement.innerHTML = '';
+                boardElement.style.gridTemplateColumns = `repeat(${gameState.cols}, 1fr)`;
+                
+                // 设置棋盘大小
+                const cellSize = 35; // 格子大小
+                const gap = 3; // 格子间距
+                const padding = 20; // 内边距
+                const boardWidth = gameState.cols * cellSize + (gameState.cols - 1) * gap + padding * 2;
+                boardElement.style.width = `${boardWidth}px`;
+                
+                gameState.board = [];
+                const totalCells = gameState.rows * gameState.cols;
+                
+                // 初始化棋盘数据
+                for (let i = 0; i < gameState.rows; i++) {
+                    for (let j = 0; j < gameState.cols; j++) {
+                        const index = i * gameState.cols + j;
+                        const cell = document.createElement('div');
+                        cell.className = 'minesweeper-cell';
+                        cell.dataset.row = i;
+                        cell.dataset.col = j;
+                        
+                        // 添加点击事件
+                        cell.addEventListener('click', () => handleCellClick(i, j));
+                        
+                        // 添加右键/长按事件（标记地雷）
+                        cell.addEventListener('contextmenu', (e) => {
+                            e.preventDefault();
+                            handleRightClick(i, j);
+                        });
+                        
+                        boardElement.appendChild(cell);
+                        
+                        // 初始化棋盘数据
+                        if (index < totalCells) {
+                            gameState.board[index] = {
+                                isMine: false,
+                                isRevealed: false,
+                                isFlagged: false,
+                                neighborMines: 0
+                            };
+                        }
+                    }
+                }
+            }
+
+            // 放置地雷（确保第一次点击不是地雷）
+            function placeMines(firstClickRow, firstClickCol) {
+                let minesPlaced = 0;
+                const totalCells = gameState.rows * gameState.cols;
+                
+                // 创建安全区域（第一次点击及其周围8格）
+                const safeCells = new Set();
+                for (let i = Math.max(0, firstClickRow - 1); i <= Math.min(gameState.rows - 1, firstClickRow + 1); i++) {
+                    for (let j = Math.max(0, firstClickCol - 1); j <= Math.min(gameState.cols - 1, firstClickCol + 1); j++) {
+                        safeCells.add(i * gameState.cols + j);
+                    }
+                }
+                
+                while (minesPlaced < gameState.mineCount && minesPlaced < totalCells - safeCells.size) {
+                    const randomIndex = Math.floor(Math.random() * totalCells);
+                    
+                    // 确保不在安全区域内
+                    if (safeCells.has(randomIndex)) continue;
+                    
+                    if (!gameState.board[randomIndex].isMine) {
+                        gameState.board[randomIndex].isMine = true;
+                        minesPlaced++;
+                    }
+                }
+                
+                // 计算每个格子周围的地雷数
+                for (let i = 0; i < gameState.rows; i++) {
+                    for (let j = 0; j < gameState.cols; j++) {
+                        const index = i * gameState.cols + j;
+                        if (!gameState.board[index].isMine) {
+                            gameState.board[index].neighborMines = countAdjacentMines(i, j);
+                        }
+                    }
+                }
+            }
+
+            // 计算相邻地雷数
+            function countAdjacentMines(row, col) {
+                let count = 0;
+                
+                for (let i = Math.max(0, row - 1); i <= Math.min(gameState.rows - 1, row + 1); i++) {
+                    for (let j = Math.max(0, col - 1); j <= Math.min(gameState.cols - 1, col + 1); j++) {
+                        if (i === row && j === col) continue;
+                        
+                        const index = i * gameState.cols + j;
+                        if (gameState.board[index] && gameState.board[index].isMine) {
+                            count++;
+                        }
+                    }
+                }
+                
+                return count;
+            }
+
+            // 处理格子点击
+            function handleCellClick(row, col) {
+                if (gameState.gameOver) return;
+                
+                const index = row * gameState.cols + col;
+                const cellData = gameState.board[index];
+                const cellElement = document.querySelector(`.minesweeper-cell[data-row="${row}"][data-col="${col}"]`);
+                
+                if (!cellData || cellData.isRevealed || cellData.isFlagged) return;
+                
+                // 如果是第一次点击，放置地雷并开始游戏
+                if (gameState.firstClick) {
+                    gameState.firstClick = false;
+                    gameState.gameStarted = true;
+                    gameState.startTime = Date.now();
+                    placeMines(row, col);
+                    startTimer();
+                }
+                
+                if (cellData.isMine) {
+                    // 点到地雷，游戏结束
+                    gameOver(false);
+                    cellElement.classList.add('mine', 'revealed');
+                    return;
+                }
+                
+                revealCell(row, col);
+                
+                // 检查是否获胜
+                if (gameState.revealedCount === gameState.rows * gameState.cols - gameState.mineCount) {
+                    gameOver(true);
+                }
+            }
+
+            // 处理右键点击（标记地雷）
+            function handleRightClick(row, col) {
+                if (gameState.gameOver || !gameState.gameStarted) return;
+                
+                const index = row * gameState.cols + col;
+                const cellData = gameState.board[index];
+                const cellElement = document.querySelector(`.minesweeper-cell[data-row="${row}"][data-col="${col}"]`);
+                
+                if (!cellData || cellData.isRevealed) return;
+                
+                if (cellData.isFlagged) {
+                    // 取消标记
+                    cellData.isFlagged = false;
+                    cellElement.classList.remove('flagged');
+                    gameState.flaggedCount--;
+                } else {
+                    // 标记地雷
+                    cellData.isFlagged = true;
+                    cellElement.classList.add('flagged');
+                    gameState.flaggedCount++;
+                }
+                
+                document.getElementById('mines-count').textContent = (gameState.mineCount - gameState.flaggedCount).toString();
+            }
+
+            // 揭示格子
+            function revealCell(row, col) {
+                const index = row * gameState.cols + col;
+                const cellData = gameState.board[index];
+                const cellElement = document.querySelector(`.minesweeper-cell[data-row="${row}"][data-col="${col}"]`);
+                
+                if (!cellData || cellData.isRevealed || cellData.isFlagged) return;
+                
+                cellData.isRevealed = true;
+                cellElement.classList.add('revealed');
+                gameState.revealedCount++;
+                
+                if (cellData.neighborMines > 0) {
+                    cellElement.textContent = cellData.neighborMines;
+                    cellElement.classList.add(`minesweeper-number-${cellData.neighborMines}`);
+                } else {
+                    // 如果是空白格子，递归揭示周围的格子
+                    for (let i = Math.max(0, row - 1); i <= Math.min(gameState.rows - 1, row + 1); i++) {
+                        for (let j = Math.max(0, col - 1); j <= Math.min(gameState.cols - 1, col + 1); j++) {
+                            if (i === row && j === col) continue;
+                            const neighborIndex = i * gameState.cols + j;
+                            if (gameState.board[neighborIndex] && !gameState.board[neighborIndex].isRevealed && !gameState.board[neighborIndex].isFlagged) {
+                                revealCell(i, j);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 游戏结束
+            function gameOver(isWin) {
+                gameState.gameOver = true;
+                gameState.gameStarted = false;
+                clearInterval(gameState.timerInterval);
+                
+                // 计算实际游戏时间
+                if (gameState.startTime) {
+                    const endTime = Date.now();
+                    gameState.timer = Math.floor((endTime - gameState.startTime) / 1000);
+                    document.getElementById('timer').textContent = gameState.timer.toString();
+                }
+                
+                const messageElement = document.getElementById('message');
+                if (isWin) {
+                    messageElement.textContent = `恭喜你赢了！用时 ${gameState.timer} 秒`;
+                    messageElement.className = 'minesweeper-message success';
+                    // 保存游戏记录
+                    saveGameRecord('minesweeper', gameState.timer, getDifficultyText(gameState.currentDifficulty));
+                    saveMinesweeperHistory(gameState.timer, getDifficultyText(gameState.currentDifficulty));
+                } else {
+                    messageElement.textContent = '游戏结束！你踩到地雷了';
+                    messageElement.className = 'minesweeper-message failure';
+                    // 失败时不保存记录
+                    revealAllMines();
+                }
+            }
+
+            // 揭示所有地雷
+            function revealAllMines() {
+                for (let i = 0; i < gameState.rows; i++) {
+                    for (let j = 0; j < gameState.cols; j++) {
+                        const index = i * gameState.cols + j;
+                        const cellData = gameState.board[index];
+                        const cellElement = document.querySelector(`.minesweeper-cell[data-row="${i}"][data-col="${j}"]`);
+                        
+                        if (cellData && cellData.isMine && !cellData.isFlagged) {
+                            cellElement.classList.add('mine', 'revealed');
+                        } else if (cellData && !cellData.isMine && cellData.isFlagged) {
+                            // 错误标记的地雷
+                            cellElement.classList.add('flagged', 'revealed');
+                            cellElement.style.color = '#ff0000';
+                        }
+                    }
+                }
+            }
+
+            // 开始计时器
+            function startTimer() {
+                clearInterval(gameState.timerInterval);
+                gameState.timer = 0;
+                document.getElementById('timer').textContent = '0';
+                
+                gameState.timerInterval = setInterval(() => {
+                    if (gameState.startTime) {
+                        const currentTime = Date.now();
+                        gameState.timer = Math.floor((currentTime - gameState.startTime) / 1000);
+                        document.getElementById('timer').textContent = gameState.timer.toString();
+                    }
+                }, 100);
+            }
+
+            // 提示功能
+            function provideHint() {
+                if (!gameState.gameStarted || gameState.gameOver) return;
+                
+                // 寻找一个未揭示且不是地雷的格子
+                const safeCells = [];
+                
+                for (let i = 0; i < gameState.rows; i++) {
+                    for (let j = 0; j < gameState.cols; j++) {
+                        const index = i * gameState.cols + j;
+                        const cellData = gameState.board[index];
+                        
+                        if (cellData && !cellData.isRevealed && !cellData.isFlagged && !cellData.isMine) {
+                            safeCells.push({row: i, col: j});
+                        }
+                    }
+                }
+                
+                if (safeCells.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * safeCells.length);
+                    const hintCell = safeCells[randomIndex];
+                    
+                    // 短暂高亮提示的格子
+                    const cellElement = document.querySelector(`.minesweeper-cell[data-row="${hintCell.row}"][data-col="${hintCell.col}"]`);
+                    const originalBg = cellElement.style.backgroundColor;
+                    
+                    cellElement.style.backgroundColor = '#f1c40f';
+                    
+                    setTimeout(() => {
+                        cellElement.style.backgroundColor = originalBg;
+                    }, 1000);
+                }
+            }
+            
+            // 获取难度文本
+            function getDifficultyText(difficulty) {
+                const difficultyMap = {
+                    easy: '简单',
+                    medium: '中等',
+                    hard: '困难'
+                };
+                return difficultyMap[difficulty] || difficulty;
+            }
+            
+            // 切换难度
+            function changeDifficulty(difficulty) {
+                gameState.currentDifficulty = difficulty;
+                gameState.rows = difficultyConfig[difficulty].rows;
+                gameState.cols = difficultyConfig[difficulty].cols;
+                gameState.mineCount = difficultyConfig[difficulty].mines;
+                
+                document.getElementById('difficulty').textContent = getDifficultyText(difficulty);
+                document.getElementById('difficulty-toggle').textContent = `难度: ${getDifficultyText(difficulty)}`;
+                document.getElementById('mines-count').textContent = gameState.mineCount.toString();
+                
+                // 更新难度选项状态
+                document.querySelectorAll('.minesweeper-difficulty-option').forEach(option => {
+                    option.classList.toggle('active', option.dataset.level === difficulty);
+                });
+                
+                // 关闭下拉菜单
+                document.getElementById('difficulty-dropdown').classList.remove('show');
+                
+                initGame();
+            }
+            
+            // 设置事件监听
+            document.getElementById('difficulty-toggle').addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.getElementById('difficulty-dropdown').classList.toggle('show');
+            });
+            
+            document.querySelectorAll('.minesweeper-difficulty-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    changeDifficulty(option.dataset.level);
+                });
+            });
+            
+            document.getElementById('hint-btn').addEventListener('click', provideHint);
+            document.getElementById('reset-btn').addEventListener('click', initGame);
+            
+            // 点击页面其他区域关闭下拉菜单
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.minesweeper-difficulty-selector')) {
+                    document.getElementById('difficulty-dropdown').classList.remove('show');
+                }
+            });
+            
+            // 初始化游戏
+            initGame();
+        }
+    </script>
+</body>
+</html>
